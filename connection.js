@@ -1,7 +1,12 @@
 const mongoose = require('mongoose')
 
 async function connectToMongo(url) {
-    return mongoose.connect(url)
+    return mongoose.connect(url),{
+          useNewUrlParser: true,
+    useUnifiedTopology: true,
+    ssl: true,  // Force SSL
+    tlsAllowInvalidCertificates: true 
+    }
     .then(console.log('MongoDB Ccnnected successfully'))
     .catch(console.log('MongoDN Conection failed'))
 }
