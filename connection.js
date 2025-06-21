@@ -7,8 +7,6 @@ async function connectToMongo(url) {
     ssl: true,  // Force SSL
     tlsAllowInvalidCertificates: true 
     }
-    .then(console.log('MongoDB Ccnnected successfully'))
-    .catch(console.log('MongoDN Conection failed'))
 }
 
 module.exports = {
