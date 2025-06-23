@@ -40,7 +40,7 @@ const getUserContacts = async (req, res) => {
     const { userId } = req.params;
 
     try {
-        const user = await Signup.findById(userId).populate('contacts', 'name email');
+        const user = await Signup.findById(userId);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
