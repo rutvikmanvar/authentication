@@ -1,5 +1,4 @@
 const Signup = require('../models/signup_model');
-const User = require('../models/user_model')
 
 // Add Contact API
 const addContact = async (req, res) => {
@@ -41,7 +40,7 @@ const getUserContacts = async (req, res) => {
     const { userId } = req.params;
 
     try {
-        const user = await User.findById(userId);
+        const user = await Signup.findById(userId);
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
