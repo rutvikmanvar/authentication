@@ -40,17 +40,20 @@ const getUserContacts = async (req, res) => {
     const { userId } = req.params;
 
     try {
-        const user = await Signup.findById(userId);
+        // Find user by _id and populate the contacts array
+        const user = await Signup.findById(userId).populate('contacts', 'name email');
 
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }
 
+        // Return the contact list
         res.status(200).json({ contacts: user.contacts });
     } catch (error) {
         res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
 
 
 module.exports = { addContact, getUserContacts };
