@@ -11,7 +11,14 @@ async function handleLogin(req,res) {
     if(!user){
         return res.json({error:'Invalid Username or Password'})
     }
-    return res.json({status:'success'})
+    return res.json(
+        {
+            status:'success',
+            _id: user._id,
+            name: user.name,
+            email: user.email
+        }
+    )
 }
 
 module.exports = {
