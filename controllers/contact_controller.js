@@ -2,30 +2,34 @@ const Signup = require('../models/signup_model');
 
 // Add Contact API
 const addContact = async (req, res) => {
-    const { userId, contactId } = req.body;
+    const { userId, email } = req.body;
 
     try {
-        // Find both users by their _id
+        // Find the user by ID
         const user = await Signup.findById(userId);
-        const contact = await Signup.findById(contactId);
+        // Find the contact by email
+        const contact = await Signup.findOne({ email });
 
         // If either user not found
         if (!user || !contact) {
-            return res.status(404).json({ message: 'User not found' });
+            return res.status(404).json({ message: 'User or contact not found' });
         }
 
-        // Check if the contact already exists in user's contact list
-        if (user.contacts.includes(contactId)) {
+        // Prevent adding self
+        if (user._id.equals(contact._id)) {
+            return res.status(400).json({ message: "You can't add yourself as a contact" });
+        }
+
+        // Check if the contact already exists
+        if (user.contacts.includes(contact._id.toString())) {
             return res.status(400).json({ message: 'Contact already added' });
         }
 
-        // Add contact to user's contact list
-        user.contacts.push(contactId);
+        // Add each other
+        user.contacts.push(contact._id);
+        contact.contacts.push(user._id);
 
-        // Add user to contact's contact list
-        contact.contacts.push(userId);
-
-        // Save both users
+        // Save both
         await user.save();
         await contact.save();
 
@@ -34,6 +38,7 @@ const addContact = async (req, res) => {
         return res.status(500).json({ message: 'Server error', error: error.message });
     }
 };
+
 
 // Get User Contact List
 const getUserContacts = async (req, res) => {
